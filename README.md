@@ -1,36 +1,143 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 📚 Book Vibe
 
-## Getting Started
+A modern and responsive **Book Management & Reading Tracker** built with **Next.js, TypeScript, Tailwind CSS, DaisyUI, React Context API, Recharts, and JSON Server**.
 
-First, run the development server:
+Book Vibe helps users explore books, view detailed information, create a personal reading list, manage a wishlist, and visualize their reading list through an interactive chart.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## 🌐 Live Website
+
+🚀 **Live Demo:**
+https://book-vibe-six-delta.vercel.app/
+
+---
+
+## ✨ Features
+
+* 📚 Browse a collection of books
+* 🔎 View detailed information for each book
+* 📖 Add books to the **Read List**
+* ❤️ Add books to the **Wishlist**
+* 🔄 Remove books from Read List or Wishlist
+* 📊 Visualize book pages using an interactive bar chart
+* ↕️ Sort books by:
+
+  * Pages: Low → High
+  * Pages: High → Low
+  * Publish Year: Old → New
+  * Publish Year: New → Old
+  * Rating: Low → High
+  * Rating: High → Low
+* 🔗 Dynamic book details pages
+* ❌ Custom Not Found handling
+* 📱 Fully responsive design
+* 🔔 Toast notifications for user actions
+* ⚡ Server-side data fetching with Next.js
+* 🧩 Context API for managing reading and wishlist data
+* 🎨 Modern UI with Tailwind CSS and DaisyUI
+
+---
+
+## 🛠️ Technologies Used
+
+* **Next.js**
+* **React**
+* **TypeScript**
+* **Tailwind CSS**
+* **DaisyUI**
+* **React Context API**
+* **Recharts**
+* **React Toastify**
+* **JSON Server**
+* **Vercel**
+
+---
+
+## 📂 Project Structure
+
+```text
+app/
+├── books/
+│   ├── page.tsx
+│   └── [bookId]/
+│       └── page.tsx
+│
+├── listed-book/
+│   └── page.tsx
+│
+├── pages-to-read/
+│   └── page.tsx
+│
+├── components/
+│   ├── Navbar.tsx
+│   ├── books/
+│   │   ├── PageChart.tsx
+│   │   ├── book-action.tsx
+│   │   ├── getbooks.ts
+│   │   └── context/
+│   │       └── book-context.tsx
+│   │
+│   └── ...
+│
+├── layout.tsx
+├── page.tsx
+└── globals.css
+
+types/
+└── bookType.ts
+
+db.json
+next.config.ts
+package.json
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 📖 Main Pages
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 🏠 Home
 
-## Learn More
+Introduces the Book Vibe application and displays featured books.
 
-To learn more about Next.js, take a look at the following resources:
+### 📚 Books
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Displays the available books with their:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+* Title
+* Author
+* Category
+* Rating
+* Pages
+* Publication year
+* Publisher
 
-## Deploy on Vercel
+### 📋 Listed Books
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Contains two sections:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+* Read Books
+* Wishlist Books
+
+Books can also be sorted based on pages, rating, and publication year.
+
+### 📊 Pages to Read
+
+Displays reading statistics and an interactive bar chart showing the number of pages in each book added to the Read List.
+
+### 📖 Book Details
+
+Each book has a dynamic route:
+
+```text
+/books/[bookId]
+```
+
+The details page displays the book cover, title, author, category, rating, pages, publisher, publication year, review, and reading actions.
+
+---
+
+## 🧠 Key Concepts Practiced
+
+This project was built while learning and practicing:
+
+* Next.js App Router
+
