@@ -1,144 +1,272 @@
-import Image from "next/image";
-import Link from "next/link";
-import { getBooks } from "../components/books/getbooks";
+"use client";
 
-export default async function BooksPage() {
-  const books = await getBooks();
+import Link from "next/link";
+import { useState } from "react";
+import { useBook } from "../components/books/context/book-context";
+
+type SortOption =
+  | "default"
+  | "pages-low"
+  | "pages-high"
+  | "year-old"
+  | "year-new"
+  | "rating-low"
+  | "rating-high";
+
+export default function ListedBookPage() {
+  const { readList, wishlist } = useBook();
+
+  const [sortBy, setSortBy] = useState<SortOption>("default");
+
+  const sortBooks = (books: typeof readList) => {
+    const sortedBooks = [...books];
+
+    switch (sortBy) {
+      case "pages-low":
+        return sortedBooks.sort((a, b) => a.totalPages - b.totalPages);
+
+      case "pages-high":
+        return sortedBooks.sort((a, b) => b.totalPages - a.totalPages);
+
+      case "year-old":
+        return sortedBooks.sort(
+          (a, b) => a.yearOfPublishing - b.yearOfPublishing,
+        );
+
+      case "year-new":
+        return sortedBooks.sort(
+          (a, b) => b.yearOfPublishing - a.yearOfPublishing,
+        );
+
+      case "rating-low":
+        return sortedBooks.sort((a, b) => a.rating - b.rating);
+
+      case "rating-high":
+        return sortedBooks.sort((a, b) => b.rating - a.rating);
+
+      default:
+        return sortedBooks;
+    }
+  };
+
+  const sortedReadList = sortBooks(readList);
+  const sortedWishlist = sortBooks(wishlist);
 
   return (
-    <main className="mx-auto max-w-6xl px-4 py-8">
-      <div className="flex flex-col gap-6">
-        {books.map((book) => (
-          <div
-            key={book.bookId}
-            className="border border-gray-100 bg-white rounded-2xl p-6 flex flex-col md:flex-row items-center gap-6 shadow-sm hover:shadow-md transition-shadow"
-          >
-            {/* Book Image Box - Full Fill */}
-            <div className="bg-[#13131305] rounded-2xl overflow-hidden flex items-center justify-center w-full md:w-56 h-64 flex-shrink-0 relative">
-              <Image
-                src={book.image}
-                alt={book.bookName}
-                fill
-                priority
-                className="object-cover p-4 rounded-2xl drop-shadow-md"
-              />
+    <main className="min-h-screen bg-base-200 px-4 py-8 sm:py-12">
+      <div className="mx-auto max-w-7xl">
+        {/* Header */}
+        <div className="mb-8 flex flex-col gap-5 rounded-2xl bg-base-100 p-6 shadow-sm sm:flex-row sm:items-center sm:justify-between">
+          {/* Title */}
+          <div>
+            <h1 className="text-2xl font-bold text-gray-900 sm:text-3xl">
+              Listed Books
+            </h1>
+
+            <p className="mt-1 text-sm text-gray-500">
+              Manage your read list and wishlist
+            </p>
+          </div>
+
+          {/* Sort */}
+          <div className="flex items-center justify-between gap-3">
+            <div>
+              <p className="text-sm font-semibold text-gray-800">Sort by</p>
+
+              <p className="hidden text-xs text-gray-400 sm:block">
+                Choose your preference
+              </p>
             </div>
 
-            {/* Book Details */}
-            <div className="flex-1 w-full space-y-3">
-              {/* Title & Author */}
-              <div>
-                <h2 className="text-2xl font-bold text-gray-900 font-serif">
-                  {book.bookName}
-                </h2>
-                <p className="text-gray-600 font-medium text-sm mt-1">
-                  By : {book.author}
-                </p>
-              </div>
+            <div className="relative">
+              <select
+                id="sort"
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value as SortOption)}
+                className="h-11 min-w-[210px] appearance-none rounded-xl border border-gray-200 bg-white px-4 pr-10 text-sm font-medium text-gray-700 shadow-sm outline-none transition hover:border-gray-300 focus:border-[#23BE0A] focus:ring-2 focus:ring-[#23BE0A]/10"
+              >
+                <option value="default">Default</option>
 
-              {/* Tags & Publishing Year */}
-              <div className="flex flex-wrap items-center gap-4 text-sm">
-                <div className="flex items-center gap-2">
-                  <span className="font-bold text-gray-900">Tag</span>
-                  {book.tags?.map((tag: string, index: number) => (
-                    <span
-                      key={index}
-                      className="bg-[#23BE0A0D] text-[#23BE0A] px-3 py-1 rounded-full font-medium text-xs"
-                    >
-                      #{tag}
-                    </span>
-                  ))}
-                </div>
+                <option value="pages-low">Pages: Low → High</option>
 
-                {book.yearOfPublishing && (
-                  <div className="flex items-center gap-1.5 text-gray-500 text-xs sm:text-sm">
-                    <svg
-                      className="w-4 h-4"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
-                      />
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
-                      />
-                    </svg>
-                    <span>Year of Publishing: {book.yearOfPublishing}</span>
-                  </div>
-                )}
-              </div>
+                <option value="pages-high">Pages: High → Low</option>
 
-              {/* Publisher & Pages */}
-              <div className="flex flex-wrap items-center gap-6 text-gray-500 text-xs sm:text-sm">
-                {book.publisher && (
-                  <div className="flex items-center gap-1.5">
-                    <svg
-                      className="w-4 h-4"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"
-                      />
-                    </svg>
-                    <span>Publisher: {book.publisher}</span>
-                  </div>
-                )}
+                <option value="year-old">Publish Year: Old → New</option>
 
-                {book.totalPages && (
-                  <div className="flex items-center gap-1.5">
-                    <svg
-                      className="w-4 h-4"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                      />
-                    </svg>
-                    <span>Page {book.totalPages}</span>
-                  </div>
-                )}
-              </div>
+                <option value="year-new">Publish Year: New → Old</option>
 
-              <hr className="border-gray-100 my-2" />
+                <option value="rating-low">Rating: Low → High</option>
 
-              {/* Bottom Badges and Action Button */}
-              <div className="flex flex-wrap items-center gap-3 pt-1">
-                <span className="bg-[#328EFF26] text-[#328EFF] text-xs font-semibold px-4 py-2 rounded-full">
-                  Category: {book.category}
-                </span>
+                <option value="rating-high">Rating: High → Low</option>
+              </select>
 
-                <span className="bg-[#FFAC3326] text-[#FFAC33] text-xs font-semibold px-4 py-2 rounded-full">
-                  Rating: {book.rating}
-                </span>
-
-                <Link
-                  href={`/listed-book/${book.bookId}`}
-                  className="bg-[#23BE0A] hover:bg-[#1fa308] text-white text-xs font-semibold px-5 py-2.5 rounded-full transition-colors ml-auto"
+              <div className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-gray-400">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-4 w-4"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth="2"
                 >
-                  View Details
-                </Link>
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="m19 9-7 7-7-7"
+                  />
+                </svg>
               </div>
             </div>
           </div>
-        ))}
+        </div>
+
+        {/* Read Books */}
+        <section className="mb-12">
+          <div className="mb-5 flex items-center justify-between">
+            <h2 className="text-xl font-bold text-gray-900 sm:text-2xl">
+              Read Books
+            </h2>
+
+            <span className="rounded-full bg-[#23BE0A0D] px-4 py-1.5 text-sm font-semibold text-[#23BE0A]">
+              {readList.length} Books
+            </span>
+          </div>
+
+          {sortedReadList.length === 0 ? (
+            <div className="rounded-2xl bg-base-100 p-10 text-center shadow-sm">
+              <p className="text-gray-500">
+                You haven't added any books to your Read List yet.
+              </p>
+            </div>
+          ) : (
+            <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+              {sortedReadList.map((book) => (
+                <div
+                  key={book.bookId}
+                  className="rounded-2xl bg-base-100 p-5 shadow-sm transition hover:-translate-y-1 hover:shadow-md"
+                >
+                  {/* Book Info */}
+                  <div className="mb-4 flex items-center gap-4">
+                    <div className="flex h-24 w-20 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-base-200">
+                      <img
+                        src={book.image}
+                        alt={book.bookName}
+                        className="h-full w-full object-contain"
+                      />
+                    </div>
+
+                    <div className="min-w-0">
+                      <h3 className="truncate font-bold text-gray-900">
+                        {book.bookName}
+                      </h3>
+
+                      <p className="mt-1 text-sm text-gray-500">
+                        By {book.author}
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Book Details */}
+                  <div className="mb-4 flex flex-wrap gap-2 text-xs">
+                    <span className="rounded-full bg-base-200 px-3 py-1">
+                      {book.totalPages} Pages
+                    </span>
+
+                    <span className="rounded-full bg-base-200 px-3 py-1">
+                      {book.yearOfPublishing}
+                    </span>
+
+                    <span className="rounded-full bg-base-200 px-3 py-1">
+                      ⭐ {book.rating}
+                    </span>
+                  </div>
+
+                  {/* Button */}
+                  <Link
+                    href={`/listed-book/${book.bookId}`}
+                    className="block rounded-lg bg-[#23BE0A] px-4 py-2.5 text-center text-sm font-semibold text-white transition hover:bg-[#1fa308]"
+                  >
+                    View Details
+                  </Link>
+                </div>
+              ))}
+            </div>
+          )}
+        </section>
+
+        {/* Wishlist */}
+        <section>
+          <div className="mb-5 flex items-center justify-between">
+            <h2 className="text-xl font-bold text-gray-900 sm:text-2xl">
+              Wishlist
+            </h2>
+
+            <span className="rounded-full bg-[#23BE0A0D] px-4 py-1.5 text-sm font-semibold text-[#23BE0A]">
+              {wishlist.length} Books
+            </span>
+          </div>
+
+          {sortedWishlist.length === 0 ? (
+            <div className="rounded-2xl bg-base-100 p-10 text-center shadow-sm">
+              <p className="text-gray-500">
+                You haven't added any books to your Wishlist yet.
+              </p>
+            </div>
+          ) : (
+            <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+              {sortedWishlist.map((book) => (
+                <div
+                  key={book.bookId}
+                  className="rounded-2xl bg-base-100 p-5 shadow-sm transition hover:-translate-y-1 hover:shadow-md"
+                >
+                  {/* Book Info */}
+                  <div className="mb-4 flex items-center gap-4">
+                    <div className="flex h-24 w-20 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-base-200">
+                      <img
+                        src={book.image}
+                        alt={book.bookName}
+                        className="h-full w-full object-contain"
+                      />
+                    </div>
+
+                    <div className="min-w-0">
+                      <h3 className="truncate font-bold text-gray-900">
+                        {book.bookName}
+                      </h3>
+
+                      <p className="mt-1 text-sm text-gray-500">
+                        By {book.author}
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Book Details */}
+                  <div className="mb-4 flex flex-wrap gap-2 text-xs">
+                    <span className="rounded-full bg-base-200 px-3 py-1">
+                      {book.totalPages} Pages
+                    </span>
+
+                    <span className="rounded-full bg-base-200 px-3 py-1">
+                      {book.yearOfPublishing}
+                    </span>
+
+                    <span className="rounded-full bg-base-200 px-3 py-1">
+                      ⭐ {book.rating}
+                    </span>
+                  </div>
+
+                  {/* Button */}
+                  <Link
+                    href={`/books/${book.bookId}`}
+                    className="block rounded-lg border border-[#23BE0A] px-4 py-2.5 text-center text-sm font-semibold text-[#23BE0A] transition hover:bg-[#23BE0A] hover:text-white"
+                  >
+                    View Details
+                  </Link>
+                </div>
+              ))}
+            </div>
+          )}
+        </section>
       </div>
     </main>
   );
