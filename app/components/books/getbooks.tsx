@@ -1,7 +1,7 @@
 import { Book } from "../../types/bookType";
 
 export async function getBooks(): Promise<Book[]> {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/books`, {
+  const res = await fetch("https://book-vibe-7si6r5lnw-programming-hero11.vercel.app/books.json", {
     cache: "no-store",
   });
 
@@ -9,7 +9,7 @@ export async function getBooks(): Promise<Book[]> {
     throw new Error("Failed to fetch books");
   }
 
-  const books: Book[] = await res.json();
+  const data: { books: Book[] } = await res.json();
 
-  return books;
+  return data.books;
 }
