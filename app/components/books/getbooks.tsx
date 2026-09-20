@@ -1,15 +1,13 @@
+import { promises as fs } from "fs";
+import path from "path";
 import { Book } from "../../types/bookType";
 
 export async function getBooks(): Promise<Book[]> {
-  const res = await fetch("https://book-vibe-7si6r5lnw-programming-hero11.vercel.app/books.json", {
-    cache: "no-store",
-  });
+  const filePath = path.join(process.cwd(), "public", "books.json");
 
-  if (!res.ok) {
-    throw new Error("Failed to fetch books");
-  }
+  const file = await fs.readFile(filePath, "utf-8");
 
-  const data: { books: Book[] } = await res.json();
+  const data = JSON.parse(file) as { books: Book[] };
 
   return data.books;
 }
