@@ -16,7 +16,7 @@ const Banner = () => {
           
           <div>
             <Link
-              href="http://localhost:3000/listed-book"
+              href="/listed-book"
               className="inline-block bg-[#23BE0A] hover:bg-[#1fa308] text-white text-base font-bold px-6 py-3.5 rounded-xl transition-colors duration-200"
             >
               View The List
