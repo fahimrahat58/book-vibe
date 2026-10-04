@@ -42,7 +42,7 @@ The project focuses on:
 
 <p align="center">
   <img
-    src="./public/screenshots/homepage.png"
+    src="./public/Screenshot 2026-10-04 213527.png"
     alt="Book Vibe Homepage"
     width="100%"
   />
