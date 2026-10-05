@@ -8,9 +8,16 @@ import { useSession, signOut } from "@/app/lib/auth-client";
 export default function Navbar() {
   const pathname = usePathname();
   const router = useRouter();
+
   const { data: session, isPending } = useSession();
 
-  const isActive = (path: string) => pathname === path;
+  const isActive = (path: string) => {
+    if (path === "/") {
+      return pathname === "/";
+    }
+
+    return pathname.startsWith(path);
+  };
 
   const handleSignOut = async () => {
     await signOut();
@@ -22,10 +29,12 @@ export default function Navbar() {
   return (
     <nav className="w-full py-4">
       <div className="mx-auto flex max-w-6xl items-center justify-between px-6">
+        {/* Logo */}
         <Link href="/" className="text-2xl font-bold text-gray-900">
           Book Vibe
         </Link>
 
+        {/* Navigation */}
         <div className="hidden items-center gap-4 md:flex">
           <Link
             href="/"
@@ -61,11 +70,13 @@ export default function Navbar() {
           </Link>
         </div>
 
+        {/* User Section */}
         <div className="flex items-center gap-3">
           {isPending ? (
             <div className="text-sm text-gray-500">Loading...</div>
           ) : session?.user ? (
             <>
+              {/* Profile */}
               <Link
                 href="/profile"
                 className="flex items-center gap-2 rounded-full transition-opacity hover:opacity-80"
@@ -89,6 +100,7 @@ export default function Navbar() {
                 </span>
               </Link>
 
+              {/* Sign Out */}
               <button
                 onClick={handleSignOut}
                 className="rounded-lg bg-red-500 px-5 py-2 text-sm font-semibold text-white transition-colors hover:bg-red-600"
@@ -98,6 +110,7 @@ export default function Navbar() {
             </>
           ) : (
             <>
+              {/* Sign In */}
               <Link
                 href="/sign-in"
                 className="rounded-lg bg-[#23BE0A] px-5 py-2 text-sm font-semibold text-white transition-colors hover:bg-[#1fa308]"
@@ -105,6 +118,7 @@ export default function Navbar() {
                 Sign In
               </Link>
 
+              {/* Sign Up */}
               <Link
                 href="/sign-up"
                 className="rounded-lg bg-[#59C6D2] px-5 py-2 text-sm font-semibold text-white transition-colors hover:bg-[#4bb1bd]"
