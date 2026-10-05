@@ -22,12 +22,14 @@ export default function SignUpPage() {
     const name = formData.get("name") as string;
     const email = formData.get("email") as string;
     const password = formData.get("password") as string;
+    const image = formData.get("image") as string;
 
     try {
       const { data: resData, error } = await signUp.email({
         name,
         email,
         password,
+        image: image || undefined,
         callbackURL: "/profile",
       });
 
@@ -69,14 +71,16 @@ export default function SignUpPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4 py-12">
+    <div className="flex min-h-screen items-center justify-center bg-gray-50 px-4 py-12">
       <div className="w-full max-w-md rounded-2xl border border-gray-100 bg-white p-8 shadow-lg">
         <div className="mb-8 text-center">
           <h2 className="text-3xl font-bold tracking-tight text-gray-900">
             Book <span className="text-[#23BE0A]">Vibe</span>
           </h2>
 
-          <p className="mt-2 text-sm text-gray-500">Create your new account</p>
+          <p className="mt-2 text-sm text-gray-500">
+            Create your new account
+          </p>
         </div>
 
         {errorMessage && (
@@ -124,6 +128,23 @@ export default function SignUpPage() {
 
           <div>
             <label
+              htmlFor="image"
+              className="mb-1 block text-sm font-medium text-gray-700"
+            >
+              Profile Image URL
+            </label>
+
+            <input
+              id="image"
+              name="image"
+              type="url"
+              placeholder="https://example.com/image.jpg"
+              className="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-gray-900 outline-none transition duration-200 focus:border-transparent focus:ring-2 focus:ring-[#23BE0A]"
+            />
+          </div>
+
+          <div>
+            <label
               htmlFor="password"
               className="mb-1 block text-sm font-medium text-gray-700"
             >
@@ -151,9 +172,9 @@ export default function SignUpPage() {
         </form>
 
         <div className="my-6 flex items-center gap-3">
-          <div className="h-px flex-1 bg-gray-200"></div>
+          <div className="h-px flex-1 bg-gray-200" />
           <span className="text-xs font-medium text-gray-400">OR</span>
-          <div className="h-px flex-1 bg-gray-200"></div>
+          <div className="h-px flex-1 bg-gray-200" />
         </div>
 
         <button
@@ -190,6 +211,7 @@ export default function SignUpPage() {
                   fill="#EA4335"
                 />
               </svg>
+
               Sign up with Google
             </>
           )}
