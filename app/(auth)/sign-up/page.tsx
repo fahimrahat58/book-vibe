@@ -27,11 +27,11 @@ export default function SignUpPage() {
         name,
         email,
         password,
-        callbackURL: "/",
+        callbackURL: "/profile",
       });
 
       if (error) {
-        setErrorMessage(error.message || "Dogoggorri uumameera!");
+        setErrorMessage(error.message || "Something went wrong!");
         return;
       }
 
@@ -40,7 +40,7 @@ export default function SignUpPage() {
       router.push("/");
     } catch (err) {
       console.error(err);
-      setErrorMessage("Dogoggorri dhiyeessii uumameera.");
+      setErrorMessage("Something went wrong. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -54,9 +54,7 @@ export default function SignUpPage() {
             Book <span className="text-[#23BE0A]">Vibe</span>
           </h2>
 
-          <p className="mt-2 text-sm text-gray-500">
-            Akkaawuntii haaraa uumuun banadhaa
-          </p>
+          <p className="mt-2 text-sm text-gray-500">Create your new account</p>
         </div>
 
         {errorMessage && (
@@ -71,7 +69,7 @@ export default function SignUpPage() {
               htmlFor="name"
               className="mb-1 block text-sm font-medium text-gray-700"
             >
-              Maqaa Guutuu
+              Full Name
             </label>
 
             <input
@@ -89,7 +87,7 @@ export default function SignUpPage() {
               htmlFor="email"
               className="mb-1 block text-sm font-medium text-gray-700"
             >
-              Imeelii
+              Email
             </label>
 
             <input
@@ -97,7 +95,7 @@ export default function SignUpPage() {
               name="email"
               type="email"
               required
-              placeholder="fahim@gmail.com"
+              placeholder="your email"
               className="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-gray-900 outline-none transition duration-200 focus:border-transparent focus:ring-2 focus:ring-[#23BE0A]"
             />
           </div>
@@ -107,7 +105,7 @@ export default function SignUpPage() {
               htmlFor="password"
               className="mb-1 block text-sm font-medium text-gray-700"
             >
-              Jechama Darbiinsaa (Password)
+              Password
             </label>
 
             <input
@@ -126,14 +124,14 @@ export default function SignUpPage() {
             disabled={loading}
             className="w-full rounded-xl bg-[#23BE0A] px-4 py-3 font-semibold text-white shadow-md transition duration-200 ease-in-out hover:bg-[#1fa909] active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50"
           >
-            {loading ? "Galmeessaa jira..." : "Sign Up"}
+            {loading ? "Creating account..." : "Sign Up"}
           </button>
         </form>
 
         <div className="mt-6 text-center text-sm text-gray-600">
-          Akkaawuntii qabduu?{" "}
+          Already have an account?{" "}
           <a
-            href="/signin"
+            href="/sign-in"
             className="font-semibold text-[#59C6D2] hover:underline"
           >
             Sign In

@@ -25,11 +25,11 @@ export default function SignInPage() {
       const { data: resData, error } = await signIn.email({
         email,
         password,
-        callbackURL: "/",
+        callbackURL: "/profile",
       });
 
       if (error) {
-        setErrorMessage(error.message || "Dogoggorri uumameera!");
+        setErrorMessage(error.message || "Something went wrong!");
         return;
       }
 
@@ -38,7 +38,7 @@ export default function SignInPage() {
       router.push("/");
     } catch (err) {
       console.error(err);
-      setErrorMessage("Dogoggorri dhiyeessii uumameera.");
+      setErrorMessage("Something went wrong. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -52,9 +52,7 @@ export default function SignInPage() {
             Book <span className="text-[#23BE0A]">Vibe</span>
           </h2>
 
-          <p className="mt-2 text-sm text-gray-500">
-            Akkaawuntii keessaniin seenaa
-          </p>
+          <p className="mt-2 text-sm text-gray-500">Sign in to your account</p>
         </div>
 
         {errorMessage && (
@@ -69,7 +67,7 @@ export default function SignInPage() {
               htmlFor="email"
               className="mb-1 block text-sm font-medium text-gray-700"
             >
-              Imeelii
+              Email
             </label>
 
             <input
@@ -77,7 +75,7 @@ export default function SignInPage() {
               name="email"
               type="email"
               required
-              placeholder="fahim@gmail.com"
+              placeholder="your email"
               className="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-gray-900 outline-none focus:ring-2 focus:ring-[#23BE0A]"
             />
           </div>
@@ -87,7 +85,7 @@ export default function SignInPage() {
               htmlFor="password"
               className="mb-1 block text-sm font-medium text-gray-700"
             >
-              Jechama Darbiinsaa
+              Password
             </label>
 
             <input
@@ -105,14 +103,14 @@ export default function SignInPage() {
             disabled={loading}
             className="w-full rounded-xl bg-[#23BE0A] px-4 py-3 font-semibold text-white shadow-md transition duration-200 hover:bg-[#1fa909] active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50"
           >
-            {loading ? "Seenaa jira..." : "Sign In"}
+            {loading ? "Signing in..." : "Sign In"}
           </button>
         </form>
 
         <div className="mt-6 text-center text-sm text-gray-600">
-          Akkaawuntii hin qabduu?{" "}
+          Don't have an account?{" "}
           <a
-            href="/signup"
+            href="/sign-up"
             className="font-semibold text-[#59C6D2] hover:underline"
           >
             Sign Up
