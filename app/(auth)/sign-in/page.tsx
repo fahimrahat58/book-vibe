@@ -8,6 +8,7 @@ export default function SignInPage() {
   const router = useRouter();
 
   const [loading, setLoading] = useState(false);
+  const [googleLoading, setGoogleLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -41,6 +42,27 @@ export default function SignInPage() {
       setErrorMessage("Something went wrong. Please try again.");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleGoogleSignIn = async () => {
+    setGoogleLoading(true);
+    setErrorMessage("");
+
+    try {
+      const { error } = await signIn.social({
+        provider: "google",
+        callbackURL: "/profile",
+      });
+
+      if (error) {
+        setErrorMessage(error.message || "Google sign in failed!");
+      }
+    } catch (err) {
+      console.error(err);
+      setErrorMessage("Google sign in failed. Please try again.");
+    } finally {
+      setGoogleLoading(false);
     }
   };
 
@@ -100,12 +122,57 @@ export default function SignInPage() {
 
           <button
             type="submit"
-            disabled={loading}
+            disabled={loading || googleLoading}
             className="w-full rounded-xl bg-[#23BE0A] px-4 py-3 font-semibold text-white shadow-md transition duration-200 hover:bg-[#1fa909] active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50"
           >
             {loading ? "Signing in..." : "Sign In"}
           </button>
         </form>
+
+        <div className="my-6 flex items-center gap-3">
+          <div className="h-px flex-1 bg-gray-200"></div>
+          <span className="text-xs font-medium text-gray-400">OR</span>
+          <div className="h-px flex-1 bg-gray-200"></div>
+        </div>
+
+        <button
+          type="button"
+          onClick={handleGoogleSignIn}
+          disabled={loading || googleLoading}
+          className="flex w-full items-center justify-center gap-3 rounded-xl border border-gray-300 bg-white px-4 py-3 font-semibold text-gray-700 shadow-sm transition duration-200 hover:bg-gray-50 hover:shadow-md active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50"
+        >
+          {googleLoading ? (
+            "Signing in with Google..."
+          ) : (
+            <>
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M21.805 12.23c0-.79-.065-1.54-.2-2.27H12v4.3h5.49a4.7 4.7 0 0 1-2.04 3.08v2.56h3.3c1.93-1.78 3.055-4.4 3.055-7.67Z"
+                  fill="#4285F4"
+                />
+                <path
+                  d="M12 22c2.76 0 5.07-.91 6.76-2.47l-3.3-2.56c-.91.61-2.07.98-3.46.98-2.66 0-4.92-1.8-5.73-4.22H2.86v2.64A10.2 10.2 0 0 0 12 22Z"
+                  fill="#34A853"
+                />
+                <path
+                  d="M6.27 13.73A6.1 6.1 0 0 1 5.95 12c0-.6.11-1.19.32-1.73V7.63H2.86A10.02 10.02 0 0 0 1.8 12c0 1.61.39 3.14 1.06 4.37l3.41-2.64Z"
+                  fill="#FBBC05"
+                />
+                <path
+                  d="M12 6.05c1.5 0 2.84.52 3.9 1.54l2.92-2.92C17.07 3.04 14.76 2 12 2a10.2 10.2 0 0 0-9.14 5.63l3.41 2.64C7.08 7.85 9.34 6.05 12 6.05Z"
+                  fill="#EA4335"
+                />
+              </svg>
+              Sign in with Google
+            </>
+          )}
+        </button>
 
         <div className="mt-6 text-center text-sm text-gray-600">
           Don't have an account?{" "}
