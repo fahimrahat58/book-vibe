@@ -25,7 +25,12 @@ const colors = [
   "black",
 ];
 
-const getPath = (x: number, y: number, width: number, height: number) => {
+const getPath = (
+  x: number,
+  y: number,
+  width: number,
+  height: number,
+) => {
   return `M${x},${y + height}
     C${x + width / 3},${y + height}
     ${x + width / 2},${y + height / 3}
@@ -44,7 +49,12 @@ const TriangleBar = (props: BarShapeProps) => {
   return (
     <path
       strokeWidth={props.isActive ? 5 : 0}
-      d={getPath(Number(x), Number(y), Number(width), Number(height))}
+      d={getPath(
+        Number(x),
+        Number(y),
+        Number(width),
+        Number(height),
+      )}
       stroke={color}
       fill={color}
       style={{
@@ -73,8 +83,8 @@ export default function PageChart() {
 
   if (readList.length === 0) {
     return (
-      <div className="flex h-[400px] items-center justify-center rounded-3xl bg-white shadow-sm">
-        <p className="text-gray-500">
+      <div className="flex h-[400px] items-center justify-center rounded-3xl bg-white px-5 shadow-sm">
+        <p className="text-center text-gray-500">
           Add books to your Read List to see the chart.
         </p>
       </div>
@@ -93,7 +103,7 @@ export default function PageChart() {
         </p>
       </div>
 
-      <div className="flex justify-center">
+      <div className="flex min-w-[650px] justify-center">
         <BarChart
           style={{
             width: "100%",
@@ -118,12 +128,30 @@ export default function PageChart() {
             }}
           />
 
-          <XAxis dataKey="name" />
+          <XAxis
+            dataKey="name"
+            tick={{
+              fontSize: 12,
+            }}
+            interval={0}
+          />
 
-          <YAxis width="auto" />
+          <YAxis
+            width="auto"
+            tick={{
+              fontSize: 12,
+            }}
+          />
 
-          <Bar dataKey="pages" shape={TriangleBar} activeBar>
-            <LabelList content={CustomColorLabel} position="top" />
+          <Bar
+            dataKey="pages"
+            shape={TriangleBar}
+            activeBar
+          >
+            <LabelList
+              content={CustomColorLabel}
+              position="top"
+            />
           </Bar>
         </BarChart>
       </div>

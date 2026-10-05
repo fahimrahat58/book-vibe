@@ -57,7 +57,6 @@ export default function ListedBookPage() {
       <div className="mx-auto max-w-7xl">
         {/* Header */}
         <div className="mb-8 flex flex-col gap-5 rounded-2xl bg-base-100 p-6 shadow-sm sm:flex-row sm:items-center sm:justify-between">
-          {/* Title */}
           <div>
             <h1 className="text-2xl font-bold text-gray-900 sm:text-3xl">
               Listed Books
@@ -86,17 +85,11 @@ export default function ListedBookPage() {
                 className="h-11 min-w-[210px] appearance-none rounded-xl border border-gray-200 bg-white px-4 pr-10 text-sm font-medium text-gray-700 shadow-sm outline-none transition hover:border-gray-300 focus:border-[#23BE0A] focus:ring-2 focus:ring-[#23BE0A]/10"
               >
                 <option value="default">Default</option>
-
                 <option value="pages-low">Pages: Low → High</option>
-
                 <option value="pages-high">Pages: High → Low</option>
-
                 <option value="year-old">Publish Year: Old → New</option>
-
                 <option value="year-new">Publish Year: New → Old</option>
-
                 <option value="rating-low">Rating: Low → High</option>
-
                 <option value="rating-high">Rating: High → Low</option>
               </select>
 
@@ -257,7 +250,7 @@ export default function ListedBookPage() {
 
                   {/* Button */}
                   <Link
-                    href={`/books/${book.bookId}`}
+                    href={`/listed-book/${book.bookId}`}
                     className="block rounded-lg border border-[#23BE0A] px-4 py-2.5 text-center text-sm font-semibold text-[#23BE0A] transition hover:bg-[#23BE0A] hover:text-white"
                   >
                     View Details

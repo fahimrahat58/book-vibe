@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import { useSession, updateUser, signOut } from "@/app/lib/auth-client";
 
 export default function ProfilePage() {
@@ -15,10 +16,12 @@ export default function ProfilePage() {
   const [message, setMessage] = useState("");
 
   const [name, setName] = useState("");
+  const [image, setImage] = useState("");
 
   useEffect(() => {
     if (session?.user) {
       setName(session.user.name || "");
+      setImage(session.user.image || "");
     }
   }, [session]);
 
@@ -31,6 +34,7 @@ export default function ProfilePage() {
     try {
       const { error } = await updateUser({
         name,
+        image,
       });
 
       if (error) {
@@ -51,6 +55,7 @@ export default function ProfilePage() {
   const handleSignOut = async () => {
     await signOut();
     router.push("/");
+    router.refresh();
   };
 
   if (isPending) {
@@ -72,7 +77,7 @@ export default function ProfilePage() {
           </p>
 
           <Link
-            href="/signin"
+            href="/sign-in"
             className="inline-block mt-5 px-5 py-2.5 bg-[#23BE0A] hover:bg-[#1fa909] text-white rounded-lg font-semibold"
           >
             Sign In
@@ -87,19 +92,28 @@ export default function ProfilePage() {
   return (
     <main className="min-h-screen bg-gray-50 px-4 py-12">
       <div className="max-w-2xl mx-auto">
-        {/* Profile Card */}
         <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
           {/* Header */}
           <div className="bg-[#23BE0A]/5 px-6 py-8 text-center border-b border-gray-100">
-            <div className="w-24 h-24 mx-auto rounded-full bg-[#23BE0A]/10 border-4 border-[#23BE0A] flex items-center justify-center text-3xl font-bold text-[#23BE0A]">
-              {user.name?.charAt(0).toUpperCase() || "U"}
+            <div className="relative w-24 h-24 mx-auto">
+              {user.image ? (
+                <Image
+                  src={user.image}
+                  alt={user.name || "Profile"}
+                  fill
+                  className="rounded-full object-cover border-4 border-[#23BE0A]"
+                  sizes="96px"
+                />
+              ) : (
+                <div className="w-24 h-24 rounded-full bg-[#23BE0A]/10 border-4 border-[#23BE0A] flex items-center justify-center text-3xl font-bold text-[#23BE0A]">
+                  {user.name?.charAt(0).toUpperCase() || "U"}
+                </div>
+              )}
             </div>
 
             <h1 className="mt-4 text-2xl font-bold text-gray-900">
               {user.name}
             </h1>
-
-            <p className="mt-1 text-sm text-gray-500">{user.email}</p>
           </div>
 
           {/* User Information */}
@@ -108,26 +122,12 @@ export default function ProfilePage() {
               Profile Information
             </h2>
 
-            <div className="space-y-5">
-              {/* Name */}
-              <div>
-                <p className="text-sm font-medium text-gray-500">Full Name</p>
+            <div>
+              <p className="text-sm font-medium text-gray-500">Full Name</p>
 
-                <p className="mt-1 text-base font-semibold text-gray-900">
-                  {user.name}
-                </p>
-              </div>
-
-              {/* Email */}
-              <div>
-                <p className="text-sm font-medium text-gray-500">
-                  Email Address
-                </p>
-
-                <p className="mt-1 text-base font-semibold text-gray-900">
-                  {user.email}
-                </p>
-              </div>
+              <p className="mt-1 text-base font-semibold text-gray-900">
+                {user.name}
+              </p>
             </div>
 
             {/* Message */}
@@ -186,26 +186,23 @@ export default function ProfilePage() {
                 />
               </div>
 
-              {/* Email */}
+              {/* Image URL */}
               <div>
                 <label
-                  htmlFor="email"
+                  htmlFor="image"
                   className="block text-sm font-medium text-gray-700 mb-2"
                 >
-                  Email Address
+                  Profile Image URL
                 </label>
 
                 <input
-                  id="email"
-                  type="email"
-                  value={user.email}
-                  disabled
-                  className="w-full px-4 py-3 rounded-lg border border-gray-200 bg-gray-100 text-gray-500 outline-none cursor-not-allowed"
+                  id="image"
+                  type="url"
+                  value={image}
+                  onChange={(e) => setImage(e.target.value)}
+                  placeholder="https://example.com/image.jpg"
+                  className="w-full px-4 py-3 rounded-lg border border-gray-300 text-gray-900 outline-none focus:ring-2 focus:ring-[#23BE0A] focus:border-transparent"
                 />
-
-                <p className="mt-1 text-xs text-gray-400">
-                  Email address cannot be changed here.
-                </p>
               </div>
 
               <button
