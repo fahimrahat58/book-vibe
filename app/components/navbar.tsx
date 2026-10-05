@@ -2,21 +2,23 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useSession, signOut } from "@/app/lib/auth-client";
 
 export default function Navbar() {
   const pathname = usePathname();
+  const { data: session, isPending } = useSession();
 
   const isActive = (path: string) => pathname === path;
+
+  const handleSignOut = async () => {
+    await signOut();
+  };
 
   return (
     <nav className="w-full py-4">
       <div className="max-w-6xl mx-auto px-6 flex items-center justify-between">
-
         {/* Logo */}
-        <Link
-          href="/"
-          className="text-2xl font-bold text-gray-900"
-        >
+        <Link href="/" className="text-2xl font-bold text-gray-900">
           Book Vibe
         </Link>
 
@@ -56,17 +58,41 @@ export default function Navbar() {
           </Link>
         </div>
 
-        {/* Buttons */}
+        {/* Auth */}
         <div className="flex items-center gap-3">
-          <button className="bg-[#23BE0A] hover:bg-[#1fa308] text-white px-5 py-2 rounded-lg text-sm font-semibold transition-colors">
-            Sign In
-          </button>
+          {isPending ? (
+            <div className="text-sm text-gray-500">Loading...</div>
+          ) : session?.user ? (
+            <>
+              <span className="text-sm font-semibold text-gray-700">
+                Welcome, {session.user.name}
+              </span>
 
-          <button className="bg-[#59C6D2] hover:bg-[#4bb1bd] text-white px-5 py-2 rounded-lg text-sm font-semibold transition-colors">
-            Sign Up
-          </button>
+              <button
+                onClick={handleSignOut}
+                className="bg-red-500 hover:bg-red-600 text-white px-5 py-2 rounded-lg text-sm font-semibold transition-colors"
+              >
+                Sign Out
+              </button>
+            </>
+          ) : (
+            <>
+              <Link
+                href="/sign-in"
+                className="bg-[#23BE0A] hover:bg-[#1fa308] text-white px-5 py-2 rounded-lg text-sm font-semibold transition-colors"
+              >
+                Sign In
+              </Link>
+
+              <Link
+                href="/sign-up"
+                className="bg-[#59C6D2] hover:bg-[#4bb1bd] text-white px-5 py-2 rounded-lg text-sm font-semibold transition-colors"
+              >
+                Sign Up
+              </Link>
+            </>
+          )}
         </div>
-
       </div>
     </nav>
   );
