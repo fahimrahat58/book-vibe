@@ -78,9 +78,7 @@ export default function SignUpPage() {
             Book <span className="text-[#23BE0A]">Vibe</span>
           </h2>
 
-          <p className="mt-2 text-sm text-gray-500">
-            Create your new account
-          </p>
+          <p className="mt-2 text-sm text-gray-500">Create your new account</p>
         </div>
 
         {errorMessage && (
@@ -165,7 +163,7 @@ export default function SignUpPage() {
           <button
             type="submit"
             disabled={loading || googleLoading}
-            className="w-full rounded-xl bg-[#23BE0A] px-4 py-3 font-semibold text-white shadow-md transition duration-200 ease-in-out hover:bg-[#1fa909] active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50"
+            className="w-full rounded-xl cursor-pointer! bg-[#23BE0A] px-4 py-3 font-semibold text-white shadow-md transition duration-200 ease-in-out hover:bg-[#1fa909] active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50"
           >
             {loading ? "Creating account..." : "Sign Up"}
           </button>
@@ -181,7 +179,7 @@ export default function SignUpPage() {
           type="button"
           onClick={handleGoogleSignUp}
           disabled={loading || googleLoading}
-          className="flex w-full items-center justify-center gap-3 rounded-xl border border-gray-300 bg-white px-4 py-3 font-semibold text-gray-700 shadow-sm transition duration-200 hover:bg-gray-50 hover:shadow-md active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50"
+          className="flex w-full items-center cursor-pointer! justify-center gap-3 rounded-xl border border-gray-300 bg-white px-4 py-3 font-semibold text-gray-700 shadow-sm transition duration-200 hover:bg-gray-50 hover:shadow-md active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50"
         >
           {googleLoading ? (
             "Signing up with Google..."
@@ -211,7 +209,6 @@ export default function SignUpPage() {
                   fill="#EA4335"
                 />
               </svg>
-
               Sign up with Google
             </>
           )}
@@ -221,7 +218,7 @@ export default function SignUpPage() {
           Already have an account?{" "}
           <a
             href="/sign-in"
-            className="font-semibold text-[#59C6D2] hover:underline"
+            className="font-semibold cursor-pointer! text-[#59C6D2] hover:underline"
           >
             Sign In
           </a>

@@ -123,7 +123,7 @@ export default function SignInPage() {
           <button
             type="submit"
             disabled={loading || googleLoading}
-            className="w-full rounded-xl bg-[#23BE0A] px-4 py-3 font-semibold text-white shadow-md transition duration-200 hover:bg-[#1fa909] active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50"
+            className="w-full rounded-xl cursor-pointer! bg-[#23BE0A] px-4 py-3 font-semibold text-white shadow-md transition duration-200 hover:bg-[#1fa909] active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50"
           >
             {loading ? "Signing in..." : "Sign In"}
           </button>
@@ -139,7 +139,7 @@ export default function SignInPage() {
           type="button"
           onClick={handleGoogleSignIn}
           disabled={loading || googleLoading}
-          className="flex w-full items-center justify-center gap-3 rounded-xl border border-gray-300 bg-white px-4 py-3 font-semibold text-gray-700 shadow-sm transition duration-200 hover:bg-gray-50 hover:shadow-md active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50"
+          className="flex w-full cursor-pointer! items-center justify-center gap-3 rounded-xl border border-gray-300 bg-white px-4 py-3 font-semibold text-gray-700 shadow-sm transition duration-200 hover:bg-gray-50 hover:shadow-md active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50"
         >
           {googleLoading ? (
             "Signing in with Google..."
@@ -178,7 +178,7 @@ export default function SignInPage() {
           Don't have an account?{" "}
           <a
             href="/sign-up"
-            className="font-semibold text-[#59C6D2] hover:underline"
+            className="font-semibold cursor-pointer! text-[#59C6D2] hover:underline"
           >
             Sign Up
           </a>

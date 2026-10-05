@@ -78,7 +78,7 @@ export default function ProfilePage() {
 
           <Link
             href="/sign-in"
-            className="inline-block mt-5 px-5 py-2.5 bg-[#23BE0A] hover:bg-[#1fa909] text-white rounded-lg font-semibold"
+            className="inline-block mt-5 px-5 py-2.5 bg-[#23BE0A] hover:bg-[#1fa909] text-white rounded-lg cursor-pointer! font-semibold"
           >
             Sign In
           </Link>
@@ -151,7 +151,7 @@ export default function ProfilePage() {
 
               <button
                 onClick={handleSignOut}
-                className="flex-1 bg-red-50 hover:bg-red-100 text-red-600 px-5 py-3 rounded-xl font-semibold transition"
+                className="flex-1 bg-red-50 cursor-pointer! hover:bg-red-100 text-red-600 px-5 py-3 rounded-xl font-semibold transition"
               >
                 Sign Out
               </button>
