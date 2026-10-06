@@ -7,14 +7,18 @@ const client = new MongoClient(process.env.BETTER_AUTH_DB_URL!);
 const db = client.db("book-vibe");
 
 export const auth = betterAuth({
+  baseURL: "https://book-vibe-six-delta.vercel.app",
+
   emailAndPassword: {
     enabled: true,
   },
+
   socialProviders: {
     google: {
       clientId: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
     },
+
     facebook: {
       clientId: process.env.FACEBOOK_CLIENT_ID!,
       clientSecret: process.env.FACEBOOK_CLIENT_SECRET!,
