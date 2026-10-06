@@ -9,6 +9,7 @@ export default function SignInPage() {
 
   const [loading, setLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
+  const [facebookLoading, setFacebookLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -63,6 +64,27 @@ export default function SignInPage() {
       setErrorMessage("Google sign in failed. Please try again.");
     } finally {
       setGoogleLoading(false);
+    }
+  };
+
+  const handleFacebookSignIn = async () => {
+    setFacebookLoading(true);
+    setErrorMessage("");
+
+    try {
+      const { error } = await signIn.social({
+        provider: "facebook",
+        callbackURL: "/profile",
+      });
+
+      if (error) {
+        setErrorMessage(error.message || "Facebook sign in failed!");
+      }
+    } catch (err) {
+      console.error(err);
+      setErrorMessage("Facebook sign in failed. Please try again.");
+    } finally {
+      setFacebookLoading(false);
     }
   };
 
@@ -122,8 +144,8 @@ export default function SignInPage() {
 
           <button
             type="submit"
-            disabled={loading || googleLoading}
-            className="w-full rounded-xl cursor-pointer! bg-[#23BE0A] px-4 py-3 font-semibold text-white shadow-md transition duration-200 hover:bg-[#1fa909] active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50"
+            disabled={loading || googleLoading || facebookLoading}
+            className="w-full cursor-pointer! rounded-xl bg-[#23BE0A] px-4 py-3 font-semibold text-white shadow-md transition duration-200 hover:bg-[#1fa909] active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50"
           >
             {loading ? "Signing in..." : "Sign In"}
           </button>
@@ -131,14 +153,16 @@ export default function SignInPage() {
 
         <div className="my-6 flex items-center gap-3">
           <div className="h-px flex-1 bg-gray-200"></div>
+
           <span className="text-xs font-medium text-gray-400">OR</span>
+
           <div className="h-px flex-1 bg-gray-200"></div>
         </div>
 
         <button
           type="button"
           onClick={handleGoogleSignIn}
-          disabled={loading || googleLoading}
+          disabled={loading || googleLoading || facebookLoading}
           className="flex w-full cursor-pointer! items-center justify-center gap-3 rounded-xl border border-gray-300 bg-white px-4 py-3 font-semibold text-gray-700 shadow-sm transition duration-200 hover:bg-gray-50 hover:shadow-md active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50"
         >
           {googleLoading ? (
@@ -170,6 +194,33 @@ export default function SignInPage() {
                 />
               </svg>
               Sign in with Google
+            </>
+          )}
+        </button>
+
+        <button
+          type="button"
+          onClick={handleFacebookSignIn}
+          disabled={loading || googleLoading || facebookLoading}
+          className="mt-3 flex w-full cursor-pointer! items-center justify-center gap-3 rounded-xl border border-gray-300 bg-white px-4 py-3 font-semibold text-gray-700 shadow-sm transition duration-200 hover:bg-gray-50 hover:shadow-md active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50"
+        >
+          {facebookLoading ? (
+            "Signing in with Facebook..."
+          ) : (
+            <>
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073C0 18.099 4.388 23.093 10.125 24V15.563H7.078V12.073H10.125V9.413C10.125 6.387 11.917 4.716 14.658 4.716C15.97 4.716 17.344 4.951 17.344 4.951V7.925H15.83C14.34 7.925 13.875 8.853 13.875 9.805V12.073H17.203L16.671 15.563H13.875V24C19.612 23.093 24 18.099 24 12.073Z"
+                  fill="#1877F2"
+                />
+              </svg>
+              Sign in with Facebook
             </>
           )}
         </button>

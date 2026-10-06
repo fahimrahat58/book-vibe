@@ -9,6 +9,7 @@ export default function SignUpPage() {
 
   const [loading, setLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
+  const [facebookLoading, setFacebookLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -67,6 +68,27 @@ export default function SignUpPage() {
       setErrorMessage("Google sign up failed. Please try again.");
     } finally {
       setGoogleLoading(false);
+    }
+  };
+
+  const handleFacebookSignUp = async () => {
+    setFacebookLoading(true);
+    setErrorMessage("");
+
+    try {
+      const { error } = await signIn.social({
+        provider: "facebook",
+        callbackURL: "/profile",
+      });
+
+      if (error) {
+        setErrorMessage(error.message || "Facebook sign up failed!");
+      }
+    } catch (err) {
+      console.error(err);
+      setErrorMessage("Facebook sign up failed. Please try again.");
+    } finally {
+      setFacebookLoading(false);
     }
   };
 
@@ -162,8 +184,8 @@ export default function SignUpPage() {
 
           <button
             type="submit"
-            disabled={loading || googleLoading}
-            className="w-full rounded-xl cursor-pointer! bg-[#23BE0A] px-4 py-3 font-semibold text-white shadow-md transition duration-200 ease-in-out hover:bg-[#1fa909] active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50"
+            disabled={loading || googleLoading || facebookLoading}
+            className="w-full cursor-pointer! rounded-xl bg-[#23BE0A] px-4 py-3 font-semibold text-white shadow-md transition duration-200 ease-in-out hover:bg-[#1fa909] active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50"
           >
             {loading ? "Creating account..." : "Sign Up"}
           </button>
@@ -178,8 +200,8 @@ export default function SignUpPage() {
         <button
           type="button"
           onClick={handleGoogleSignUp}
-          disabled={loading || googleLoading}
-          className="flex w-full items-center cursor-pointer! justify-center gap-3 rounded-xl border border-gray-300 bg-white px-4 py-3 font-semibold text-gray-700 shadow-sm transition duration-200 hover:bg-gray-50 hover:shadow-md active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50"
+          disabled={loading || googleLoading || facebookLoading}
+          className="flex w-full cursor-pointer! items-center justify-center gap-3 rounded-xl border border-gray-300 bg-white px-4 py-3 font-semibold text-gray-700 shadow-sm transition duration-200 hover:bg-gray-50 hover:shadow-md active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50"
         >
           {googleLoading ? (
             "Signing up with Google..."
@@ -214,11 +236,38 @@ export default function SignUpPage() {
           )}
         </button>
 
+        <button
+          type="button"
+          onClick={handleFacebookSignUp}
+          disabled={loading || googleLoading || facebookLoading}
+          className="mt-3 flex w-full cursor-pointer! items-center justify-center gap-3 rounded-xl border border-gray-300 bg-white px-4 py-3 font-semibold text-gray-700 shadow-sm transition duration-200 hover:bg-gray-50 hover:shadow-md active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50"
+        >
+          {facebookLoading ? (
+            "Signing up with Facebook..."
+          ) : (
+            <>
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073C0 18.099 4.388 23.093 10.125 24V15.563H7.078V12.073H10.125V9.413C10.125 6.387 11.917 4.716 14.658 4.716C15.97 4.716 17.344 4.951 17.344 4.951V7.925H15.83C14.34 7.925 13.875 8.853 13.875 9.805V12.073H17.203L16.671 15.563H13.875V24C19.612 23.093 24 18.099 24 12.073Z"
+                  fill="#1877F2"
+                />
+              </svg>
+              Sign up with Facebook
+            </>
+          )}
+        </button>
+
         <div className="mt-6 text-center text-sm text-gray-600">
           Already have an account?{" "}
           <a
             href="/sign-in"
-            className="font-semibold cursor-pointer! text-[#59C6D2] hover:underline"
+            className="cursor-pointer! font-semibold text-[#59C6D2] hover:underline"
           >
             Sign In
           </a>
